@@ -5,6 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 public class StatusNoticiasController{
     [HttpGet]
     public string Get(){
-        return "Olá Notícias";
+        return "Olá Status Notícias";
     }
 }
