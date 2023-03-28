@@ -17,7 +17,7 @@ public class UsuariosController : ControllerBase
     {
         try
         {
-            context.TB_Usuarios.Add(model);
+            context.TBUsuario.Add(model);
             await context.SaveChangesAsync();
             return Ok("Usuário cadastrado com sucesso!");
         }
@@ -32,7 +32,7 @@ public class UsuariosController : ControllerBase
     {
         try
         {
-            return Ok(await context.TB_Usuarios.ToListAsync());
+            return Ok(await context.TBUsuario.ToListAsync());
         }
         catch
         {
@@ -45,8 +45,8 @@ public class UsuariosController : ControllerBase
     {
         try
         {
-            if (await context.TB_Usuarios.AnyAsync(p => p.IDUsuario == id))
-                return Ok(await context.TB_Usuarios.FindAsync(id));
+            if (await context.TBUsuario.AnyAsync(p => p.IDUsuario == id))
+                return Ok(await context.TBUsuario.FindAsync(id));
             else
                 return NotFound();
         }
@@ -64,10 +64,10 @@ public class UsuariosController : ControllerBase
 
         try
         {
-            if (await context.TB_Usuarios.AnyAsync(p => p.IDUsuario == id) == false)
+            if (await context.TBUsuario.AnyAsync(p => p.IDUsuario == id) == false)
                 return NotFound();
 
-            context.TB_Usuarios.Update(model);
+            context.TBUsuario.Update(model);
             await context.SaveChangesAsync();
             return Ok("Usuário salvo com sucesso!");
         }
@@ -82,12 +82,12 @@ public class UsuariosController : ControllerBase
     {
         try
         {
-            Usuarios model = await context.TB_Usuarios.FindAsync(id);
+            Usuarios model = await context.TBUsuario.FindAsync(id);
 
             if (model == null)
                 return NotFound();
 
-            context.TB_Usuarios.Remove(model);
+            context.TBUsuario.Remove(model);
             await context.SaveChangesAsync();
             return Ok("Usuário removido com sucesso");
         }
