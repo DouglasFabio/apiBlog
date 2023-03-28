@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 public class Usuarios{
-    [Required]
     public int IDUsuario {get;set;}
 
     [Required(ErrorMessage = "O campo NOME é obrigatório!")]

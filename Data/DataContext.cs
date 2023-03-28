@@ -6,4 +6,5 @@ public class DataContext : DbContext
         : base(options) { }
 
     public DbSet<Usuarios> TB_Usuarios { get; set; } = null!;
+    public DbSet<Autores> TB_Autores { get; set; } = null!;
 }
