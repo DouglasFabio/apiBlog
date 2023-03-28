@@ -1,0 +1,12 @@
+// JSON - ADD USUARIO
+
+{
+    "Nome": "Administrador",
+    "Email": "admin@stringelements.com",
+    "Senha": "admin",
+    "CodAtivacao": "a1d2m3i4n",
+    "StatusConta": "V",
+    "StatusSenha": "V",
+    "TipoUsuario:": "M",
+    "DTNascimento": "16-01-1998"
+}

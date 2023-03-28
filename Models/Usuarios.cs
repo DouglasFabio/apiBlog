@@ -14,8 +14,7 @@ public class Usuarios{
     [MinLength(8)]
     public string Senha {get;set;}
 
-    [Required(ErrorMessage ="O campo DATA DE NASCIMENTO é obrigatório!")]
-    [Range(typeof(DateTime), "01-12-2022", "31-12-2022")]
+    [Range(typeof(DateTime), "01-01-1920", "31-12-2022")]
     public DateTime DTNascimento {get;set;}
 
     [Required(ErrorMessage = "Código em branco!")]
@@ -29,7 +28,6 @@ public class Usuarios{
     [MaxLength(1, ErrorMessage = "Status da Conta inválido!")]
     public string StatusConta {get;set;}
 
-    [Required(ErrorMessage = "Tipo em branco!")]
     [MaxLength(1, ErrorMessage = "Tipo de Usuário inválido!")]
     public string TipoUsuario {get;set;}
 }
