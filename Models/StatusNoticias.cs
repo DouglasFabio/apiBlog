@@ -7,7 +7,7 @@ public class StatusNoticias{
     public int StatusNoticia {get;set;}
 
     [Required(ErrorMessage = "O Comentário é obrigatório")]
-    public string Comentário {get;set;}
+    public string? Comentario {get;set;}
 
     [Required(ErrorMessage ="Código em branco")]
     public int CODNoticia {get;set;}

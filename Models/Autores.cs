@@ -7,10 +7,10 @@ public class Autores{
 
     [Required(ErrorMessage = "O Apelido é obrigatório")]
     [MaxLength(25, ErrorMessage = "O apelido deve possuir, no máximo, 25 caracteres")]
-    public string Apelido {get;set;}
+    public string Apelido {get;set;} = null!;
 
     [Required(ErrorMessage = "Senha provisória em branco")]
-    public string SenhaProvisoria {get;set;}
+    public string SenhaProvisoria {get;set;} = null!;
 
     [Required(ErrorMessage = "Código inválido")]
     public int CODUsuario {get;set;}
