@@ -28,6 +28,7 @@ public class Usuarios{
     [MaxLength(1, ErrorMessage = "Status da Conta inválido!")]
     public string StatusConta {get;set;}
 
+    [Required(ErrorMessage = "Tipo em branco!")]
     [MaxLength(1, ErrorMessage = "Tipo de Usuário inválido!")]
     public string TipoUsuario {get;set;}
 }
