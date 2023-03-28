@@ -33,7 +33,7 @@ public class Usuarios{
     [MaxLength(1, ErrorMessage = "Tipo de Usuário inválido!")]
     public string TipoUsuario {get;set;} = null!;
     
-    public virtual ICollection<Autores> Autores { get; } = new List<Autores>();
+    public virtual ICollection<Autores> Tbautor { get; } = new List<Autores>();
 
     public virtual ICollection<StatusNoticias> TbstatusNoticia { get; } = new List<StatusNoticias>();
 }
