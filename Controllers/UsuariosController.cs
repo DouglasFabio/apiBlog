@@ -1,3 +1,4 @@
+using apiBlog.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -5,19 +6,19 @@ using Microsoft.EntityFrameworkCore;
 [ApiController]
 public class UsuariosController : ControllerBase
 {
-    private readonly DataContext context;
+    private readonly SeBlogContext context;
 
-    public UsuariosController(DataContext Context)
+    public UsuariosController(SeBlogContext Context)
     {
         context = Context;
     }
 
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] Usuarios model)
+    public async Task<ActionResult> Post([FromBody] TbUsuario model)
     {
         try
         {
-            context.TBUsuario.Add(model);
+            context.TbUsuarios.Add(model);
             await context.SaveChangesAsync();
             return Ok("Usuário cadastrado com sucesso!");
         }
@@ -28,11 +29,11 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Usuarios>>> Get()
+    public async Task<ActionResult<IEnumerable<TbUsuario>>> Get()
     {
         try
-        {
-            return Ok(await context.TBUsuario.ToListAsync());
+        {   
+            return Ok(await context.TbUsuarios.ToListAsync());
         }
         catch
         {
@@ -41,12 +42,12 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Usuarios>> Get([FromRoute] int id)
+    public async Task<ActionResult<TbUsuario>> Get([FromRoute] int id)
     {
         try
         {
-            if (await context.TBUsuario.AnyAsync(p => p.IDUsuario == id))
-                return Ok(await context.TBUsuario.FindAsync(id));
+            if (await context.TbUsuarios.AnyAsync(p => p.IdUsuario == id))
+                return Ok(await context.TbUsuarios.FindAsync(id));
             else
                 return NotFound();
         }
@@ -57,17 +58,17 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> Put([FromRoute] int id, [FromBody] Usuarios model)
+    public async Task<ActionResult> Put([FromRoute] int id, [FromBody] TbUsuario model)
     {
-        if (id != model.IDUsuario)
+        if (id != model.IdUsuario)
             return BadRequest();
 
         try
         {
-            if (await context.TBUsuario.AnyAsync(p => p.IDUsuario == id) == false)
+            if (await context.TbUsuarios.AnyAsync(p => p.IdUsuario == id) == false)
                 return NotFound();
 
-            context.TBUsuario.Update(model);
+            context.TbUsuarios.Update(model);
             await context.SaveChangesAsync();
             return Ok("Usuário salvo com sucesso!");
         }
@@ -82,12 +83,12 @@ public class UsuariosController : ControllerBase
     {
         try
         {
-            Usuarios model = await context.TBUsuario.FindAsync(id);
+            TbUsuario model = await context.TbUsuarios.FindAsync(id);
 
             if (model == null)
                 return NotFound();
 
-            context.TBUsuario.Remove(model);
+            context.TbUsuarios.Remove(model);
             await context.SaveChangesAsync();
             return Ok("Usuário removido com sucesso");
         }
