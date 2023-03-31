@@ -46,7 +46,7 @@ public class UsuariosController : ControllerBase
     {
         try
         {
-            if (await context.TbUsuarios.AnyAsync(p => p.IdUsuario == id))
+            if (await context.TbUsuarios.AnyAsync(p => p.Idusuario == id))
                 return Ok(await context.TbUsuarios.FindAsync(id));
             else
                 return NotFound();
@@ -60,12 +60,12 @@ public class UsuariosController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult> Put([FromRoute] int id, [FromBody] TbUsuario model)
     {
-        if (id != model.IdUsuario)
+        if (id != model.Idusuario)
             return BadRequest();
 
         try
         {
-            if (await context.TbUsuarios.AnyAsync(p => p.IdUsuario == id) == false)
+            if (await context.TbUsuarios.AnyAsync(p => p.Idusuario == id) == false)
                 return NotFound();
 
             context.TbUsuarios.Update(model);

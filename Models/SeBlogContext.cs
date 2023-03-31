@@ -15,7 +15,7 @@ public partial class SeBlogContext : DbContext
     {
     }
 
-    public virtual DbSet<TbAutor> TbAutors { get; set; }
+    public virtual DbSet<TbAutore> TbAutores { get; set; }
 
     public virtual DbSet<TbNoticia> TbNoticias { get; set; }
 
@@ -28,11 +28,11 @@ public partial class SeBlogContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<TbAutor>(entity =>
+        modelBuilder.Entity<TbAutore>(entity =>
         {
-            entity.HasKey(e => e.Idautor).HasName("PK__TB_Autor__5DC53A138E212ECF");
+            entity.HasKey(e => e.Idautor).HasName("PK__TB_Autor__5DC53A1333FA8104");
 
-            entity.ToTable("TB_Autor");
+            entity.ToTable("TB_Autores");
 
             entity.Property(e => e.Idautor).HasColumnName("IDAutor");
             entity.Property(e => e.ApelidoAutor)
@@ -41,14 +41,14 @@ public partial class SeBlogContext : DbContext
             entity.Property(e => e.Codusuario).HasColumnName("CODUsuario");
             entity.Property(e => e.SenhaProvisoria).IsUnicode(false);
 
-            entity.HasOne(d => d.CodusuarioNavigation).WithMany(p => p.TbAutors)
+            entity.HasOne(d => d.CodusuarioNavigation).WithMany(p => p.TbAutores)
                 .HasForeignKey(d => d.Codusuario)
-                .HasConstraintName("FK__TB_Autore__CODUs__4F7CD00D");
+                .HasConstraintName("FK__TB_Autore__CODUs__3A81B327");
         });
 
         modelBuilder.Entity<TbNoticia>(entity =>
         {
-            entity.HasKey(e => e.Idnoticia).HasName("PK__TB_Notic__A7F535DB1100CE6E");
+            entity.HasKey(e => e.Idnoticia).HasName("PK__TB_Notic__A7F535DB427645C4");
 
             entity.ToTable("TB_Noticias");
 
@@ -69,12 +69,12 @@ public partial class SeBlogContext : DbContext
 
             entity.HasOne(d => d.CodautorNavigation).WithMany(p => p.TbNoticia)
                 .HasForeignKey(d => d.Codautor)
-                .HasConstraintName("FK__TB_Notici__CODAu__52593CB8");
+                .HasConstraintName("FK__TB_Notici__CODAu__3D5E1FD2");
         });
 
         modelBuilder.Entity<TbStatusNoticia>(entity =>
         {
-            entity.HasKey(e => e.IdstatusNoticia).HasName("PK__TB_Statu__A88FCFC093DF7835");
+            entity.HasKey(e => e.IdstatusNoticia).HasName("PK__TB_Statu__A88FCFC00DC6FD1D");
 
             entity.ToTable("TB_StatusNoticias");
 
@@ -85,51 +85,44 @@ public partial class SeBlogContext : DbContext
 
             entity.HasOne(d => d.CodleitorNavigation).WithMany(p => p.TbStatusNoticia)
                 .HasForeignKey(d => d.Codleitor)
-                .HasConstraintName("FK__TB_Status__CODLe__5629CD9C");
+                .HasConstraintName("FK__TB_Status__CODLe__412EB0B6");
 
             entity.HasOne(d => d.CodnoticiaNavigation).WithMany(p => p.TbStatusNoticia)
                 .HasForeignKey(d => d.Codnoticia)
-                .HasConstraintName("FK__TB_Status__CODNo__5535A963");
+                .HasConstraintName("FK__TB_Status__CODNo__403A8C7D");
         });
 
         modelBuilder.Entity<TbUsuario>(entity =>
         {
-            entity.HasKey(e => e.IdUsuario).HasName("PK__TB_Usuar__523111691F73F486");
+            entity.HasKey(e => e.Idusuario).HasName("PK__TB_Usuar__52311169036018A0");
 
             entity.ToTable("TB_Usuarios");
 
-            entity.HasIndex(e => e.Email, "UQ__TB_Usuar__A9D10534EEB17149").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__TB_Usuar__A9D105343350C53B").IsUnique();
 
-            entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
+            entity.Property(e => e.Idusuario).HasColumnName("IDUsuario");
             entity.Property(e => e.CodAtivacao)
-                .IsUnicode(false)
-                .HasColumnName("codAtivacao");
-            entity.Property(e => e.DtNascimento)
+                .HasMaxLength(8)
+                .IsUnicode(false);
+            entity.Property(e => e.Dtnascimento)
                 .HasColumnType("date")
-                .HasColumnName("dtNascimento");
+                .HasColumnName("DTNascimento");
             entity.Property(e => e.Email)
                 .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("email");
+                .IsUnicode(false);
             entity.Property(e => e.Nome)
                 .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("nome");
-            entity.Property(e => e.Senha)
-                .IsUnicode(false)
-                .HasColumnName("senha");
+                .IsUnicode(false);
+            entity.Property(e => e.Senha).IsUnicode(false);
             entity.Property(e => e.StatusConta)
                 .HasMaxLength(1)
-                .IsUnicode(false)
-                .HasColumnName("statusConta");
+                .IsUnicode(false);
             entity.Property(e => e.StatusSenha)
                 .HasMaxLength(1)
-                .IsUnicode(false)
-                .HasColumnName("statusSenha");
+                .IsUnicode(false);
             entity.Property(e => e.TipoUsuario)
                 .HasMaxLength(1)
-                .IsUnicode(false)
-                .HasColumnName("tipoUsuario");
+                .IsUnicode(false);
         });
 
         OnModelCreatingPartial(modelBuilder);

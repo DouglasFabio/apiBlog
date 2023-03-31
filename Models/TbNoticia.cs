@@ -15,13 +15,13 @@ public partial class TbNoticia
 
     public string Texto { get; set; } = null!;
 
-    public string Situacao { get; set; } = null!;
+    public string? Situacao { get; set; }
 
     public DateTime? DataAlteracao { get; set; }
 
     public int? Codautor { get; set; }
 
-    public virtual TbAutor? CodautorNavigation { get; set; }
+    public virtual TbAutore? CodautorNavigation { get; set; }
 
     public virtual ICollection<TbStatusNoticia> TbStatusNoticia { get; } = new List<TbStatusNoticia>();
 }

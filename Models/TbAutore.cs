@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace apiBlog.Models;
 
-public partial class TbAutor
+public partial class TbAutore
 {
     public int Idautor { get; set; }
 
