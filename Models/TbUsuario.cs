@@ -13,15 +13,15 @@ public partial class TbUsuario
 
     public string Senha { get; set; } = null!;
 
-    public string? DtNascimento { get; set; }
+    public DateTime? DtNascimento { get; set; }
 
-    public string CodAtivacao { get; set; } = null!;
+    public string? CodAtivacao { get; set; } 
 
-    public string StatusSenha { get; set; } = null!;
+    public string? StatusSenha { get; set; } 
 
-    public string StatusConta { get; set; } = null!;
+    public string? StatusConta { get; set; } 
 
-    public string TipoUsuario { get; set; } = null!;
+    public string? TipoUsuario { get; set; } 
 
     public virtual ICollection<TbAutor> TbAutors { get; } = new List<TbAutor>();
 

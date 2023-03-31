@@ -15,13 +15,16 @@ public partial class SeBlogContext : DbContext
     {
     }
 
-    public virtual DbSet<TbAutor> TbAutors { get; set; } = null!;
+    public virtual DbSet<TbAutor> TbAutors { get; set; }
 
-    public virtual DbSet<TbNoticia> TbNoticias { get; set; } = null!;
+    public virtual DbSet<TbNoticia> TbNoticias { get; set; }
 
-    public virtual DbSet<TbStatusNoticia> TbStatusNoticias { get; set; } = null!;
+    public virtual DbSet<TbStatusNoticia> TbStatusNoticias { get; set; }
 
-    public virtual DbSet<TbUsuario> TbUsuarios { get; set; } = null!;
+    public virtual DbSet<TbUsuario> TbUsuarios { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseSqlServer("Name=ConnectionStrings:Development");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -102,8 +105,7 @@ public partial class SeBlogContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("codAtivacao");
             entity.Property(e => e.DtNascimento)
-                .HasMaxLength(10)
-                .IsUnicode(false)
+                .HasColumnType("date")
                 .HasColumnName("dtNascimento");
             entity.Property(e => e.Email)
                 .HasMaxLength(50)
