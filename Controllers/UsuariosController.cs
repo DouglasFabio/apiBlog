@@ -18,9 +18,13 @@ public class UsuariosController : ControllerBase
     {
         try
         {
-            context.TbUsuarios.Add(model);
-            await context.SaveChangesAsync();
-            return Ok("Usuário cadastrado com sucesso!");
+            if (await context.TbUsuarios.AnyAsync(p => p.Email == model.Email))
+                return BadRequest("Email já utilizado!");
+            else{
+                context.TbUsuarios.Add(model);
+                await context.SaveChangesAsync();
+                return Ok("Usuário cadastrado com sucesso!");
+            }
         }
         catch
         {
