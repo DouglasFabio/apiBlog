@@ -25,26 +25,28 @@ public class UsuariosController : ControllerBase
                 return BadRequest("Email já cadastrado!");
             else{
 
-                MailMessage mail = new MailMessage();
-                var d = "adm_seblog@outlook.com";
-                var s = "Admin@seblog";
-                mail.From = new MailAddress(d);
-                mail.To.Add(model.Email);
-                mail.Subject = "CÓDIGO DE ATIVAÇÃO - StringElements Blog";
-                mail.Body = "Olá "+model.Nome+", segue código de ativação para verificação da sua conta no StringElements Blog: "+ model.CodAtivacao+"";
+                if (model.TipoUsuario != "M"){
+                    MailMessage mail = new MailMessage();
+                    var d = "adm_seblog@outlook.com";
+                    var s = "Admin@seblog";
+                    mail.From = new MailAddress(d);
+                    mail.To.Add(model.Email);
+                    mail.Subject = "CÓDIGO DE ATIVAÇÃO - StringElements Blog";
+                    mail.Body = "Olá "+model.Nome+", segue código de ativação para verificação da sua conta no StringElements Blog: "+ model.CodAtivacao+"";
 
-                using (var smtp = new SmtpClient("SMTP.office365.com", 587)){
-                    smtp.UseDefaultCredentials = false;
-                    smtp.EnableSsl = true;
-                    smtp.Credentials = new NetworkCredential(d,s);
-                    
-                    try
-                    {
-                        smtp.Send(mail);
-                    }
-                    catch (System.Exception ex)
-                    {
-                        Console.Write(ex.Message);
+                    using (var smtp = new SmtpClient("SMTP.office365.com", 587)){
+                        smtp.UseDefaultCredentials = false;
+                        smtp.EnableSsl = true;
+                        smtp.Credentials = new NetworkCredential(d,s);
+                        
+                        try
+                        {
+                            smtp.Send(mail);
+                        }
+                        catch (System.Exception ex)
+                        {
+                            Console.Write(ex.Message);
+                        }
                     }
                 }
 
