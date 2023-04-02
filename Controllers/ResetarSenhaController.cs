@@ -54,4 +54,25 @@ public class ResetarSenhaController : ControllerBase
             return BadRequest("Email não encontrado.");
         }
     }
+
+    [HttpPut]
+    public async Task<ActionResult> Put([FromBody] TbUsuario model)
+    {
+        if (await context.TbUsuarios.AnyAsync(p => p.CodSenha != model.CodSenha))
+            return BadRequest("Código Inválido, tente novamente.");
+
+        try
+        {
+            if (await context.TbUsuarios.AnyAsync(p => p.Email == model.Email) == false)
+                return NotFound("Não foi possível alterar a senha.");
+
+            context.TbUsuarios.Update(model);
+            await context.SaveChangesAsync();
+            return Ok("Senha alterada com sucesso!");
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
 }
