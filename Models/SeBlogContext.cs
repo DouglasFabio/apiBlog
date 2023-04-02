@@ -113,7 +113,7 @@ public partial class SeBlogContext : DbContext
             entity.Property(e => e.Nome)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.Senha).IsUnicode(false);
+            entity.Property(e => e.Senha).HasColumnType("text");
             entity.Property(e => e.StatusConta)
                 .HasMaxLength(1)
                 .IsUnicode(false);

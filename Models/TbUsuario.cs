@@ -11,7 +11,7 @@ public partial class TbUsuario
 
     public string Email { get; set; } = null!;
 
-    public string Senha { get; set; } = null!;
+    public string? Senha { get; set; }
 
     public DateTime? Dtnascimento { get; set; }
 

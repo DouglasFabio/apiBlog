@@ -1,6 +1,8 @@
 using apiBlog.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -19,7 +21,7 @@ public class UsuariosController : ControllerBase
         try
         {
             if (await context.TbUsuarios.AnyAsync(p => p.Email == model.Email))
-                return BadRequest("Email já utilizado!");
+                return BadRequest("Email já cadastrado!");
             else{
                 context.TbUsuarios.Add(model);
                 await context.SaveChangesAsync();
