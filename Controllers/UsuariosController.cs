@@ -1,10 +1,9 @@
 using apiBlog.Models;
-using System.Net;
-using System.Net.Mail;
+namespace apiBlog.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
-namespace apiBlog.Services;
+using System.Net.Mail;
+using System.Net;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -48,6 +47,7 @@ public class UsuariosController : ControllerBase
                         Console.Write(ex.Message);
                     }
                 }
+
                 model.Senha = model.Senha.GerarHash();
 
                 context.TbUsuarios.Add(model);
