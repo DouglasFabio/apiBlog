@@ -15,6 +15,8 @@ public partial class TbStatusNoticia
 
     public int? Codleitor { get; set; }
 
+    public DateTime? DtComentario { get; set; }
+
     public virtual TbUsuario? CodleitorNavigation { get; set; }
 
     public virtual TbNoticia? CodnoticiaNavigation { get; set; }

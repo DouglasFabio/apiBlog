@@ -82,6 +82,7 @@ public partial class SeBlogContext : DbContext
             entity.Property(e => e.Codleitor).HasColumnName("CODLeitor");
             entity.Property(e => e.Codnoticia).HasColumnName("CODNoticia");
             entity.Property(e => e.Comentario).IsUnicode(false);
+            entity.Property(e => e.DtComentario).HasColumnType("date");
 
             entity.HasOne(d => d.CodleitorNavigation).WithMany(p => p.TbStatusNoticia)
                 .HasForeignKey(d => d.Codleitor)
@@ -102,6 +103,9 @@ public partial class SeBlogContext : DbContext
 
             entity.Property(e => e.Idusuario).HasColumnName("IDUsuario");
             entity.Property(e => e.CodAtivacao)
+                .HasMaxLength(8)
+                .IsUnicode(false);
+            entity.Property(e => e.CodSenha)
                 .HasMaxLength(8)
                 .IsUnicode(false);
             entity.Property(e => e.Dtnascimento)

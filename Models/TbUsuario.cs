@@ -23,6 +23,8 @@ public partial class TbUsuario
 
     public string? TipoUsuario { get; set; }
 
+    public string? CodSenha { get; set; }
+
     public virtual ICollection<TbAutore> TbAutores { get; } = new List<TbAutore>();
 
     public virtual ICollection<TbStatusNoticia> TbStatusNoticia { get; } = new List<TbStatusNoticia>();
