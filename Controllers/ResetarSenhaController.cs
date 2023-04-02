@@ -30,7 +30,7 @@ public class ResetarSenhaController : ControllerBase
                 mail.From = new MailAddress(d);
                 mail.To.Add(model.Email);
                 mail.Subject = "RESETAR SENHA - StringElements Blog";
-                mail.Body = "Olá "+model.Nome+", utilize o código: "+ model.CodAtivacao+" para resetar a senha no StringElements Blog";
+                mail.Body = "Olá "+model.Nome+", utilize o código: "+ model.CodSenha+" para resetar a senha no StringElements Blog";
 
                 using (var smtp = new SmtpClient("SMTP.office365.com", 587)){
                     smtp.UseDefaultCredentials = false;
