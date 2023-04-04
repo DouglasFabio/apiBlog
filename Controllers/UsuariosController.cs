@@ -26,6 +26,15 @@ public class UsuariosController : ControllerBase
             else{
 
                 if (model.TipoUsuario != "M"){
+
+                    model.CodAtivacao = model.CodAtivacao.GerarCodigo();
+
+                    context.TbUsuarios
+                        .Where(u => u.Email == model.Email)
+                        .ExecuteUpdate(s =>
+                            s.SetProperty(u => u.CodAtivacao, model.CodAtivacao)
+                        );
+
                     MailMessage mail = new MailMessage();
                     var d = "adm_seblog@outlook.com";
                     var s = "Admin@seblog";
