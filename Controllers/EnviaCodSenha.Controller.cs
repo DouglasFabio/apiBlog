@@ -27,6 +27,8 @@ public class EnviaCodSenhaController : ControllerBase
                 
                 var usuario = context.TbUsuarios.Where(p => p.Email == model.Email).FirstOrDefault();
 
+                 model.CodSenha = model.CodSenha.GerarCodigo();
+
                 MailMessage mail = new MailMessage();
                 var d = "adm_seblog@outlook.com";
                 var s = "Admin@seblog";
