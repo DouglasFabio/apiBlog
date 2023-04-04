@@ -23,14 +23,27 @@ public class ResetarSenhaController : ControllerBase
         {
             if (await context.TbUsuarios.AnyAsync(p => p.Email == model.Email ) == false)
                 return NotFound("Usuário não cadastrado!");
-            else if (await context.TbUsuarios.AnyAsync(p => p.Email == model.Email)){
+            else{
+                
+                var usuario = context.TbUsuarios.Where(p => p.Email == model.Email).FirstOrDefault();
+
                 MailMessage mail = new MailMessage();
                 var d = "adm_seblog@outlook.com";
                 var s = "Admin@seblog";
                 mail.From = new MailAddress(d);
                 mail.To.Add(model.Email);
                 mail.Subject = "RESETAR SENHA - StringElements Blog";
-                mail.Body = "Olá "+model.Nome+", utilize o código: "+ model.CodSenha+" para resetar a senha no StringElements Blog";
+                mail.Body = "Olá "+usuario.Nome+", utilize o código: "+ model.CodSenha+" para resetar a senha no StringElements Blog. Este código expira em 30 MINUTOS.";
+
+                context.TbUsuarios
+                    .Where(u => u.Email == model.Email)
+                    .ExecuteUpdate(c =>
+                        c.SetProperty(u => u.CodSenha, model.CodSenha)
+                    );
+                
+                //context.TbUsuarios.Attach(usuario);
+                //context.Entry(usuario).Property(c => c.CodSenha).IsModified = true;
+                context.SaveChanges();
 
                 using (var smtp = new SmtpClient("SMTP.office365.com", 587)){
                     smtp.UseDefaultCredentials = false;
@@ -51,7 +64,7 @@ public class ResetarSenhaController : ControllerBase
         }
         catch
         {
-            return BadRequest("Email não encontrado.");
+            return BadRequest("Erro ao enviar código!");
         }
     }
 
