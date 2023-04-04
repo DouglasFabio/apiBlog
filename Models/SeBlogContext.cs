@@ -108,6 +108,9 @@ public partial class SeBlogContext : DbContext
             entity.Property(e => e.CodSenha)
                 .HasMaxLength(8)
                 .IsUnicode(false);
+            entity.Property(e => e.DtaltSenha)
+                .HasColumnType("datetime")
+                .HasColumnName("DTAltSenha");
             entity.Property(e => e.Dtnascimento)
                 .HasColumnType("date")
                 .HasColumnName("DTNascimento");

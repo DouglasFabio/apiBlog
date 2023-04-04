@@ -73,19 +73,33 @@ public class ResetarSenhaController : ControllerBase
     {
         if (await context.TbUsuarios.AnyAsync(p => p.CodSenha != model.CodSenha))
             return BadRequest("Código Inválido, tente novamente.");
+        else{
+            try
+            {
+                if (await context.TbUsuarios.AnyAsync(p => p.Senha == model.Senha))
+                    return BadRequest("Senha já utilizada!");
+                
+                model.Senha = model.Senha.GerarHash();
+                context.TbUsuarios
+                    .Where(u => u.Email == model.Email)
+                    .ExecuteUpdate(s =>
+                        s.SetProperty(u => u.Senha, model.Senha)
+                    );
 
-        try
-        {
-            if (await context.TbUsuarios.AnyAsync(p => p.Email == model.Email) == false)
-                return NotFound("Não foi possível alterar a senha.");
+                var horaAtual = DateTime.Now;
 
-            context.TbUsuarios.Update(model);
-            await context.SaveChangesAsync();
-            return Ok("Senha alterada com sucesso!");
-        }
-        catch
-        {
-            return BadRequest();
+                context.TbUsuarios
+                    .Where(u => u.Email == model.Email)
+                    .ExecuteUpdate(s =>
+                        s.SetProperty(u => u.DtaltSenha, horaAtual)
+                    );
+                context.SaveChanges();
+                return Ok("Senha alterada com sucesso!");
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }
