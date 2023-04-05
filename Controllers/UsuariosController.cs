@@ -33,38 +33,70 @@ public class UsuariosController : ControllerBase
 
                 // Se o TipoUsuario NÃO for Master (administrador), gera um código aleatório e envia no email no Usuário
                 if (model.TipoUsuario != "M"){
+                    // Se o TipoUsuario for LEITOR, envia código de verificação no email informado.
+                    if(model.TipoUsuario == "L"){
+                        model.CodAtivacao = model.CodAtivacao.GerarCodigo();
+                        model.StatusConta = "N";
+                        model.StatusSenha = "N";
 
-                    model.CodAtivacao = model.CodAtivacao.GerarCodigo();
-                    model.StatusConta = "N";
-                    model.StatusSenha = "N";
+                        context.TbUsuarios
+                            .Where(u => u.Email == model.Email)
+                            .ExecuteUpdate(s =>
+                                s.SetProperty(u => u.CodAtivacao, model.CodAtivacao)
+                            );
 
-                    context.TbUsuarios
-                        .Where(u => u.Email == model.Email)
-                        .ExecuteUpdate(s =>
-                            s.SetProperty(u => u.CodAtivacao, model.CodAtivacao)
-                        );
+                        MailMessage mail = new MailMessage();
+                        var d = "adm_seblog@outlook.com";
+                        var s = "Admin@seblog";
+                        mail.From = new MailAddress(d);
+                        mail.To.Add(model.Email);
+                        mail.Subject = "CÓDIGO DE ATIVAÇÃO - StringElements Blog";
+                        mail.Body = "Olá "+model.Nome+", segue código de ativação para verificação da sua conta no StringElements Blog: "+ model.CodAtivacao+"";
 
-                    MailMessage mail = new MailMessage();
-                    var d = "adm_seblog@outlook.com";
-                    var s = "Admin@seblog";
-                    mail.From = new MailAddress(d);
-                    mail.To.Add(model.Email);
-                    mail.Subject = "CÓDIGO DE ATIVAÇÃO - StringElements Blog";
-                    mail.Body = "Olá "+model.Nome+", segue código de ativação para verificação da sua conta no StringElements Blog: "+ model.CodAtivacao+"";
-
-                    using (var smtp = new SmtpClient("SMTP.office365.com", 587)){
-                        smtp.UseDefaultCredentials = false;
-                        smtp.EnableSsl = true;
-                        smtp.Credentials = new NetworkCredential(d,s);
+                        using (var smtp = new SmtpClient("SMTP.office365.com", 587)){
+                            smtp.UseDefaultCredentials = false;
+                            smtp.EnableSsl = true;
+                            smtp.Credentials = new NetworkCredential(d,s);
+                            
+                            try
+                            {
+                                smtp.Send(mail);
+                            }
+                            catch (System.Exception ex)
+                            {
+                                Console.Write(ex.Message);
+                            }
+                        }
+                    // Senão se o TipoUsuario for AUTOR, envia senha provisória no e-mail informado.
+                    }else{ 
                         
-                        try
-                        {
-                            smtp.Send(mail);
+                        model.TipoUsuario = "A";
+                        TbAutore autor = new TbAutore();
+                        autor.SenhaProvisoria = autor.SenhaProvisoria.GerarCodigo();
+
+                        MailMessage mail = new MailMessage();
+                        var d = "adm_seblog@outlook.com";
+                        var s = "Admin@seblog";
+                        mail.From = new MailAddress(d);
+                        mail.To.Add(model.Email);
+                        mail.Subject = "SENHA PROVISÓRIA - StringElements Blog";
+                        mail.Body = "Olá "+model.Nome+", segue senha provisória de acesso ao StringElements Blog: "+ autor.SenhaProvisoria+"";
+
+                        using (var smtp = new SmtpClient("SMTP.office365.com", 587)){
+                            smtp.UseDefaultCredentials = false;
+                            smtp.EnableSsl = true;
+                            smtp.Credentials = new NetworkCredential(d,s);
+                            
+                            try
+                            {
+                                smtp.Send(mail);
+                            }
+                            catch (System.Exception ex)
+                            {
+                                Console.Write(ex.Message);
+                            }
                         }
-                        catch (System.Exception ex)
-                        {
-                            Console.Write(ex.Message);
-                        }
+
                     }
                 // Se o TipoUsuario for Master (administrador), verifica a conta e a senha automaticamente.
                 }else{
@@ -74,7 +106,6 @@ public class UsuariosController : ControllerBase
                 }
 
                 model.Senha = model.Senha.GerarHash();
-
                 context.TbUsuarios.Add(model);
                 await context.SaveChangesAsync();
                 return Ok("Usuário cadastrado com sucesso!");
