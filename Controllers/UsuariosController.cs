@@ -112,9 +112,14 @@ public class UsuariosController : ControllerBase
             if (await context.TbUsuarios.AnyAsync(p => p.Idusuario == id) == false)
                 return NotFound();
 
-            context.TbUsuarios.Update(model);
+            context.TbUsuarios
+                .Where(u => u.Idusuario == id)
+                .ExecuteUpdate(s =>
+                    s.SetProperty(u => u.Email, model.Email)
+                     .SetProperty(u => u.Dtnascimento, model.Dtnascimento)
+                );
             await context.SaveChangesAsync();
-            return Ok("Usuário salvo com sucesso!");
+            return Ok("Dados atualizados com sucesso!");
         }
         catch
         {
