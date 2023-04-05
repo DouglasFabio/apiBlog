@@ -23,6 +23,8 @@ public class UsuariosController : ControllerBase
         {
             if (await context.TbUsuarios.AnyAsync(p => p.Email == model.Email))
                 return BadRequest("Email já cadastrado!");
+            if(await context.TbUsuarios.AnyAsync(p => p.TipoUsuario == "M") == true)
+                return BadRequest("Já existe um administrador do sistema!");
             else{
 
                 if (model.TipoUsuario != "M"){
