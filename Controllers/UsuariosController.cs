@@ -21,12 +21,17 @@ public class UsuariosController : ControllerBase
     {
         try
         {
+            //Se o email digitado já existir no SE-Blog
             if (await context.TbUsuarios.AnyAsync(p => p.Email == model.Email))
                 return BadRequest("Email já cadastrado!");
-            if(await context.TbUsuarios.AnyAsync(p => p.TipoUsuario == "M") == true)
+
+            //Se ADM já existir no SE-Blog
+            if (await context.TbUsuarios.Where(p => p.TipoUsuario == model.TipoUsuario).AnyAsync(p => p.TipoUsuario == "M"))
                 return BadRequest("Já existe um administrador do sistema!");
+        
             else{
 
+                // Se o TipoUsuario NÃO for Master (administrador), gera um código aleatório e envia no email no Usuário
                 if (model.TipoUsuario != "M"){
 
                     model.CodAtivacao = model.CodAtivacao.GerarCodigo();
@@ -59,6 +64,11 @@ public class UsuariosController : ControllerBase
                             Console.Write(ex.Message);
                         }
                     }
+                // Se o TipoUsuario for Master (administrador), verifica a conta e a senha automaticamente.
+                }else{
+                    model.CodAtivacao = null;
+                    model.StatusConta = "V";
+                    model.StatusSenha = "V";
                 }
 
                 model.Senha = model.Senha.GerarHash();
