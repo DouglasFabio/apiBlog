@@ -35,6 +35,8 @@ public class UsuariosController : ControllerBase
                 if (model.TipoUsuario != "M"){
 
                     model.CodAtivacao = model.CodAtivacao.GerarCodigo();
+                    model.StatusConta = "N";
+                    model.StatusSenha = "N";
 
                     context.TbUsuarios
                         .Where(u => u.Email == model.Email)
