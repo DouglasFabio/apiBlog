@@ -68,35 +68,6 @@ public class UsuariosController : ControllerBase
                             }
                         }
                     // Senão se o TipoUsuario for AUTOR, envia senha provisória no e-mail informado.
-                    }else{ 
-                        
-                        model.TipoUsuario = "A";
-                        TbAutore autor = new TbAutore();
-                        autor.SenhaProvisoria = autor.SenhaProvisoria.GerarCodigo();
-
-                        MailMessage mail = new MailMessage();
-                        var d = "adm_seblog@outlook.com";
-                        var s = "Admin@seblog";
-                        mail.From = new MailAddress(d);
-                        mail.To.Add(model.Email);
-                        mail.Subject = "SENHA PROVISÓRIA - StringElements Blog";
-                        mail.Body = "Olá "+model.Nome+", segue senha provisória de acesso ao StringElements Blog: "+ autor.SenhaProvisoria+"";
-
-                        using (var smtp = new SmtpClient("SMTP.office365.com", 587)){
-                            smtp.UseDefaultCredentials = false;
-                            smtp.EnableSsl = true;
-                            smtp.Credentials = new NetworkCredential(d,s);
-                            
-                            try
-                            {
-                                smtp.Send(mail);
-                            }
-                            catch (System.Exception ex)
-                            {
-                                Console.Write(ex.Message);
-                            }
-                        }
-
                     }
                 // Se o TipoUsuario for Master (administrador), verifica a conta e a senha automaticamente.
                 }else{

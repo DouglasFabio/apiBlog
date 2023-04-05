@@ -15,7 +15,7 @@ public partial class TbNoticia
 
     public string Texto { get; set; } = null!;
 
-    public string? Situacao { get; set; }
+    public string Situacao { get; set; } = null!;
 
     public DateTime? DataAlteracao { get; set; }
 

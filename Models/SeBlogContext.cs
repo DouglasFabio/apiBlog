@@ -30,7 +30,7 @@ public partial class SeBlogContext : DbContext
     {
         modelBuilder.Entity<TbAutore>(entity =>
         {
-            entity.HasKey(e => e.Idautor).HasName("PK__TB_Autor__5DC53A1333FA8104");
+            entity.HasKey(e => e.Idautor).HasName("PK__TB_Autor__5DC53A13BDD09331");
 
             entity.ToTable("TB_Autores");
 
@@ -48,7 +48,7 @@ public partial class SeBlogContext : DbContext
 
         modelBuilder.Entity<TbNoticia>(entity =>
         {
-            entity.HasKey(e => e.Idnoticia).HasName("PK__TB_Notic__A7F535DB427645C4");
+            entity.HasKey(e => e.Idnoticia).HasName("PK__TB_Notic__A7F535DBD3119C3F");
 
             entity.ToTable("TB_Noticias");
 
@@ -74,7 +74,7 @@ public partial class SeBlogContext : DbContext
 
         modelBuilder.Entity<TbStatusNoticia>(entity =>
         {
-            entity.HasKey(e => e.IdstatusNoticia).HasName("PK__TB_Statu__A88FCFC00DC6FD1D");
+            entity.HasKey(e => e.IdstatusNoticia).HasName("PK__TB_Statu__A88FCFC08C8B0699");
 
             entity.ToTable("TB_StatusNoticias");
 
@@ -95,19 +95,15 @@ public partial class SeBlogContext : DbContext
 
         modelBuilder.Entity<TbUsuario>(entity =>
         {
-            entity.HasKey(e => e.Idusuario).HasName("PK__TB_Usuar__52311169036018A0");
+            entity.HasKey(e => e.Idusuario).HasName("PK__TB_Usuar__5231116919ACFAE4");
 
             entity.ToTable("TB_Usuarios");
 
-            entity.HasIndex(e => e.Email, "UQ__TB_Usuar__A9D105343350C53B").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__TB_Usuar__A9D10534FF890E8C").IsUnique();
 
             entity.Property(e => e.Idusuario).HasColumnName("IDUsuario");
-            entity.Property(e => e.CodAtivacao)
-                .HasMaxLength(8)
-                .IsUnicode(false);
-            entity.Property(e => e.CodSenha)
-                .HasMaxLength(8)
-                .IsUnicode(false);
+            entity.Property(e => e.CodAtivacao).IsUnicode(false);
+            entity.Property(e => e.CodSenha).IsUnicode(false);
             entity.Property(e => e.DtaltSenha)
                 .HasColumnType("datetime")
                 .HasColumnName("DTAltSenha");
@@ -120,7 +116,7 @@ public partial class SeBlogContext : DbContext
             entity.Property(e => e.Nome)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.Senha).HasColumnType("text");
+            entity.Property(e => e.Senha).IsUnicode(false);
             entity.Property(e => e.StatusConta)
                 .HasMaxLength(1)
                 .IsUnicode(false);

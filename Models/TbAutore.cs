@@ -7,9 +7,9 @@ public partial class TbAutore
 {
     public int Idautor { get; set; }
 
-    public string ApelidoAutor { get; set; } = null!;
+    public string? ApelidoAutor { get; set; }
 
-    public string SenhaProvisoria { get; set; } = null!;
+    public string? SenhaProvisoria { get; set; }
 
     public int? Codusuario { get; set; }
 

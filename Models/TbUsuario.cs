@@ -11,11 +11,11 @@ public partial class TbUsuario
 
     public string Email { get; set; } = null!;
 
-    public string? Senha { get; set; }
+    public string Senha { get; set; } = null!;
 
     public DateTime? Dtnascimento { get; set; }
 
-    public string? CodAtivacao { get; set; }
+    public string CodAtivacao { get; set; } = null!;
 
     public string? StatusSenha { get; set; }
 

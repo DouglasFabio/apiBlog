@@ -11,11 +11,11 @@ public partial class TbStatusNoticia
 
     public string? Comentario { get; set; }
 
+    public DateTime? DtComentario { get; set; }
+
     public int? Codnoticia { get; set; }
 
     public int? Codleitor { get; set; }
-
-    public DateTime? DtComentario { get; set; }
 
     public virtual TbUsuario? CodleitorNavigation { get; set; }
 
