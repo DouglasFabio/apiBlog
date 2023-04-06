@@ -15,7 +15,7 @@ public partial class TbUsuario
 
     public DateTime? Dtnascimento { get; set; }
 
-    public string CodAtivacao { get; set; } = null!;
+    public string? CodAtivacao { get; set; }
 
     public string? StatusSenha { get; set; }
 

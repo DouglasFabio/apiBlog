@@ -15,13 +15,13 @@ public partial class SeBlogContext : DbContext
     {
     }
 
-    public virtual DbSet<TbAutore> TbAutores { get; set; }
+    public virtual DbSet<TbAutore> TbAutores { get; set; } = null!;
 
-    public virtual DbSet<TbNoticia> TbNoticias { get; set; }
+    public virtual DbSet<TbNoticia> TbNoticias { get; set; } = null!;
 
-    public virtual DbSet<TbStatusNoticia> TbStatusNoticias { get; set; }
+    public virtual DbSet<TbStatusNoticia> TbStatusNoticias { get; set; } = null!;
 
-    public virtual DbSet<TbUsuario> TbUsuarios { get; set; }
+    public virtual DbSet<TbUsuario> TbUsuarios { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=ConnectionStrings:Development");
@@ -30,7 +30,7 @@ public partial class SeBlogContext : DbContext
     {
         modelBuilder.Entity<TbAutore>(entity =>
         {
-            entity.HasKey(e => e.Idautor).HasName("PK__TB_Autor__5DC53A13BDD09331");
+            entity.HasKey(e => e.Idautor).HasName("PK__TB_Autor__5DC53A1304771BAD");
 
             entity.ToTable("TB_Autores");
 
@@ -48,7 +48,7 @@ public partial class SeBlogContext : DbContext
 
         modelBuilder.Entity<TbNoticia>(entity =>
         {
-            entity.HasKey(e => e.Idnoticia).HasName("PK__TB_Notic__A7F535DBD3119C3F");
+            entity.HasKey(e => e.Idnoticia).HasName("PK__TB_Notic__A7F535DBE121936E");
 
             entity.ToTable("TB_Noticias");
 
@@ -74,7 +74,7 @@ public partial class SeBlogContext : DbContext
 
         modelBuilder.Entity<TbStatusNoticia>(entity =>
         {
-            entity.HasKey(e => e.IdstatusNoticia).HasName("PK__TB_Statu__A88FCFC08C8B0699");
+            entity.HasKey(e => e.IdstatusNoticia).HasName("PK__TB_Statu__A88FCFC0A27D045F");
 
             entity.ToTable("TB_StatusNoticias");
 
@@ -95,11 +95,11 @@ public partial class SeBlogContext : DbContext
 
         modelBuilder.Entity<TbUsuario>(entity =>
         {
-            entity.HasKey(e => e.Idusuario).HasName("PK__TB_Usuar__5231116919ACFAE4");
+            entity.HasKey(e => e.Idusuario).HasName("PK__TB_Usuar__52311169268CBAFC");
 
             entity.ToTable("TB_Usuarios");
 
-            entity.HasIndex(e => e.Email, "UQ__TB_Usuar__A9D10534FF890E8C").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__TB_Usuar__A9D10534BB23BE26").IsUnique();
 
             entity.Property(e => e.Idusuario).HasColumnName("IDUsuario");
             entity.Property(e => e.CodAtivacao).IsUnicode(false);
