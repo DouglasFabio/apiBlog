@@ -77,24 +77,4 @@ public class NoticiasController : ControllerBase
             return BadRequest();
         }
     }
-
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete([FromRoute] int id)
-    {
-        try
-        {
-            TbNoticia model = await context.TbNoticias.FindAsync(id);
-
-            if (model == null)
-                return NotFound();
-
-            context.TbNoticias.Remove(model);
-            await context.SaveChangesAsync();
-            return Ok("Notícia removida com sucesso");
-        }
-        catch
-        {
-            return BadRequest("Falha ao remover notícia.");
-        }
-    }
 }

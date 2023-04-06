@@ -139,24 +139,4 @@ public class UsuariosController : ControllerBase
             return BadRequest();
         }
     }
-
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete([FromRoute] int id)
-    {
-        try
-        {
-            TbUsuario model = await context.TbUsuarios.FindAsync(id);
-
-            if (model == null)
-                return NotFound();
-
-            context.TbUsuarios.Remove(model);
-            await context.SaveChangesAsync();
-            return Ok("Usuário removido com sucesso");
-        }
-        catch
-        {
-            return BadRequest("Falha ao remover usuário.");
-        }
-    }
 }
