@@ -7,16 +7,16 @@ using System.Net;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UsuariosController : ControllerBase
+public class AutoresController : ControllerBase
 {
     private readonly SeBlogContext context;
 
-    public UsuariosController(SeBlogContext Context)
+    public AutoresController(SeBlogContext Context)
     {
         context = Context;
     }
 
-    [HttpPost]
+[HttpPost]
     public async Task<ActionResult> Post([FromBody] TbUsuario model)
     {
         try
@@ -31,45 +31,7 @@ public class UsuariosController : ControllerBase
         
             else{
 
-                if (model.TipoUsuario == "L"){
-                    model.CodAtivacao = model.CodAtivacao.GerarCodigo();
-                    model.StatusConta = "N";
-                    model.StatusSenha = "N";
-                    model.Senha = model.Senha.GerarHash();
-
-                    context.TbUsuarios
-                        .Where(u => u.Email == model.Email)
-                        .ExecuteUpdate(s =>
-                            s.SetProperty(u => u.CodAtivacao, model.CodAtivacao)
-                        );
-
-                    MailMessage mail = new MailMessage();
-                    // adm_seblog@yahoo.com
-                    // Admin@seblog
-                    //smtp.mail.yahoo.com
-                    var d = "adm_seblog@outlook.com";
-                    var s = "Admin@seblog";
-                    mail.From = new MailAddress(d);
-                    mail.To.Add(model.Email);
-                    mail.Subject = "CÓDIGO DE ATIVAÇÃO - StringElements Blog";
-                    mail.Body = "Olá "+model.Nome+", segue código de ativação para verificação da sua conta no StringElements Blog: "+ model.CodAtivacao+"";
-
-                    using (var smtp = new SmtpClient("SMTP.office365.com", 587)){
-                        smtp.UseDefaultCredentials = false;
-                        smtp.EnableSsl = true;
-                        smtp.Credentials = new NetworkCredential(d,s);
-                        
-                        try
-                        {
-                            smtp.Send(mail);
-                        }
-                        catch (System.Exception ex)
-                        {
-                            return BadRequest(ex);
-                        }
-                    }
-                
-                }else if(model.TipoUsuario == "A"){
+                if(model.TipoUsuario == "A"){
                     model.CodAtivacao = null;
                     model.StatusConta = "N";
                     model.StatusSenha = "N";
@@ -97,27 +59,20 @@ public class UsuariosController : ControllerBase
                         }
                         catch (System.Exception ex)
                         {
-                            return BadRequest(ex);
+                            return BadRequest();
                         }
                     }    
-                }else if(model.TipoUsuario == "M"){
-                    model.CodAtivacao = null;
-                    model.TipoUsuario = "M";
-                    model.StatusConta = "V";
-                    model.StatusSenha = "V";
-                    model.Senha = model.Senha.GerarHash();
                 }else{
-                    return BadRequest("Impossível cadastrar usuário");
+                    return BadRequest("Impossível cadastrar autor!");
                 }
-              
                 context.TbUsuarios.Add(model);
                 await context.SaveChangesAsync();
-                return Ok("Usuário cadastrado com sucesso!");
+                return Ok("Autor cadastrado com sucesso!");
             }
         }
         catch
         {
-            return BadRequest("Falha ao cadastrar usuário.");
+            return BadRequest("Falha ao cadastrar autor.");
         }
     }
 
@@ -125,12 +80,12 @@ public class UsuariosController : ControllerBase
     public async Task<ActionResult<IEnumerable<TbUsuario>>> Get()
     {
         try
-        {   
-            return Ok(await context.TbUsuarios.ToListAsync());
+        {
+            return Ok(await context.TbUsuarios.Where(p=> p.TipoUsuario == "A").ToListAsync());
         }
         catch
         {
-            return BadRequest("Erro ao obter usuários.");
+            return BadRequest("Erro ao obter autores");
         }
     }
 
@@ -164,11 +119,11 @@ public class UsuariosController : ControllerBase
             context.TbUsuarios
                 .Where(u => u.Idusuario == id)
                 .ExecuteUpdate(s =>
-                    s.SetProperty(u => u.Email, model.Email)
-                     .SetProperty(u => u.Dtnascimento, model.Dtnascimento)
+                    s.SetProperty(u => u.Nome, model.Nome)
                 );
+            context.TbUsuarios.Update(model);
             await context.SaveChangesAsync();
-            return Ok("Dados atualizados com sucesso!");
+            return Ok("Nome do autor editado com sucesso");
         }
         catch
         {

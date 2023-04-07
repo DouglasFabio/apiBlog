@@ -36,6 +36,8 @@ builder.Services.AddDbContext<apiBlog.Models.SeBlogContext>(options =>
     options.UseSqlServer("name=ConnectionStrings:Development"));
 
 builder.Services.AddAuthorization(options => options.AddPolicy("MasterPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "M")));
+builder.Services.AddAuthorization(options => options.AddPolicy("AuthorPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "A")));
+builder.Services.AddAuthorization(options => options.AddPolicy("ReaderPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "R")));
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
