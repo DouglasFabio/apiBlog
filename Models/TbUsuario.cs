@@ -27,7 +27,11 @@ public partial class TbUsuario
 
     public DateTime? DtaltSenha { get; set; }
 
-    public virtual ICollection<TbAutore> TbAutores { get; } = new List<TbAutore>();
+    public string? ApelidoAutor { get; set; }
+
+    public int? Codnoticia { get; set; }
+
+    public virtual ICollection<TbNoticia> TbNoticia { get; } = new List<TbNoticia>();
 
     public virtual ICollection<TbStatusNoticia> TbStatusNoticia { get; } = new List<TbStatusNoticia>();
 }

@@ -15,40 +15,20 @@ public partial class SeBlogContext : DbContext
     {
     }
 
-    public virtual DbSet<TbAutore> TbAutores { get; set; } = null!;
+    public virtual DbSet<TbNoticia> TbNoticias { get; set; }
 
-    public virtual DbSet<TbNoticia> TbNoticias { get; set; } = null!;
+    public virtual DbSet<TbStatusNoticia> TbStatusNoticias { get; set; }
 
-    public virtual DbSet<TbStatusNoticia> TbStatusNoticias { get; set; } = null!;
-
-    public virtual DbSet<TbUsuario> TbUsuarios { get; set; } = null!;
+    public virtual DbSet<TbUsuario> TbUsuarios { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=ConnectionStrings:Development");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<TbAutore>(entity =>
-        {
-            entity.HasKey(e => e.Idautor).HasName("PK__TB_Autor__5DC53A1304771BAD");
-
-            entity.ToTable("TB_Autores");
-
-            entity.Property(e => e.Idautor).HasColumnName("IDAutor");
-            entity.Property(e => e.ApelidoAutor)
-                .HasMaxLength(25)
-                .IsUnicode(false);
-            entity.Property(e => e.Codusuario).HasColumnName("CODUsuario");
-            entity.Property(e => e.SenhaProvisoria).IsUnicode(false);
-
-            entity.HasOne(d => d.CodusuarioNavigation).WithMany(p => p.TbAutores)
-                .HasForeignKey(d => d.Codusuario)
-                .HasConstraintName("FK__TB_Autore__CODUs__3A81B327");
-        });
-
         modelBuilder.Entity<TbNoticia>(entity =>
         {
-            entity.HasKey(e => e.Idnoticia).HasName("PK__TB_Notic__A7F535DBE121936E");
+            entity.HasKey(e => e.Idnoticia).HasName("PK__TB_Notic__A7F535DB61A02058");
 
             entity.ToTable("TB_Noticias");
 
@@ -69,12 +49,12 @@ public partial class SeBlogContext : DbContext
 
             entity.HasOne(d => d.CodautorNavigation).WithMany(p => p.TbNoticia)
                 .HasForeignKey(d => d.Codautor)
-                .HasConstraintName("FK__TB_Notici__CODAu__3D5E1FD2");
+                .HasConstraintName("FK__TB_Notici__CODAu__3A81B327");
         });
 
         modelBuilder.Entity<TbStatusNoticia>(entity =>
         {
-            entity.HasKey(e => e.IdstatusNoticia).HasName("PK__TB_Statu__A88FCFC0A27D045F");
+            entity.HasKey(e => e.IdstatusNoticia).HasName("PK__TB_Statu__A88FCFC0505D3F90");
 
             entity.ToTable("TB_StatusNoticias");
 
@@ -86,24 +66,28 @@ public partial class SeBlogContext : DbContext
 
             entity.HasOne(d => d.CodleitorNavigation).WithMany(p => p.TbStatusNoticia)
                 .HasForeignKey(d => d.Codleitor)
-                .HasConstraintName("FK__TB_Status__CODLe__412EB0B6");
+                .HasConstraintName("FK__TB_Status__CODLe__3E52440B");
 
             entity.HasOne(d => d.CodnoticiaNavigation).WithMany(p => p.TbStatusNoticia)
                 .HasForeignKey(d => d.Codnoticia)
-                .HasConstraintName("FK__TB_Status__CODNo__403A8C7D");
+                .HasConstraintName("FK__TB_Status__CODNo__3D5E1FD2");
         });
 
         modelBuilder.Entity<TbUsuario>(entity =>
         {
-            entity.HasKey(e => e.Idusuario).HasName("PK__TB_Usuar__52311169268CBAFC");
+            entity.HasKey(e => e.Idusuario).HasName("PK__TB_Usuar__52311169192FA540");
 
             entity.ToTable("TB_Usuarios");
 
-            entity.HasIndex(e => e.Email, "UQ__TB_Usuar__A9D10534BB23BE26").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__TB_Usuar__A9D105340C1AD4EF").IsUnique();
 
             entity.Property(e => e.Idusuario).HasColumnName("IDUsuario");
+            entity.Property(e => e.ApelidoAutor)
+                .HasMaxLength(25)
+                .IsUnicode(false);
             entity.Property(e => e.CodAtivacao).IsUnicode(false);
             entity.Property(e => e.CodSenha).IsUnicode(false);
+            entity.Property(e => e.Codnoticia).HasColumnName("CODNoticia");
             entity.Property(e => e.DtaltSenha)
                 .HasColumnType("datetime")
                 .HasColumnName("DTAltSenha");

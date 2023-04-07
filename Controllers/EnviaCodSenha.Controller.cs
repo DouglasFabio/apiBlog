@@ -26,8 +26,8 @@ public class EnviaCodSenhaController : ControllerBase
             else{
                 
                 var usuario = context.TbUsuarios.Where(p => p.Email == model.Email).FirstOrDefault();
-
-                 model.CodSenha = model.CodSenha!.GerarCodigo();
+                model.Senha = "Trocar@123";
+                model.CodSenha = model.CodSenha.GerarCodigo();
 
                 MailMessage mail = new MailMessage();
                 var d = "adm_seblog@outlook.com";
@@ -35,7 +35,7 @@ public class EnviaCodSenhaController : ControllerBase
                 mail.From = new MailAddress(d);
                 mail.To.Add(model.Email);
                 mail.Subject = "RESETAR SENHA - StringElements Blog";
-                mail.Body = "Olá "+usuario!.Nome+", utilize o código: "+ model.CodSenha+" para resetar a senha no StringElements Blog. Este código expira em 30 MINUTOS.";
+                mail.Body = "Olá "+usuario.Nome+", utilize o código: "+ model.CodSenha+" para resetar a senha no StringElements Blog. Este código expira em 30 MINUTOS.";
 
                 context.TbUsuarios
                     .Where(u => u.Email == model.Email)

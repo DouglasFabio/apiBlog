@@ -21,7 +21,7 @@ public partial class TbNoticia
 
     public int? Codautor { get; set; }
 
-    public virtual TbAutore? CodautorNavigation { get; set; }
+    public virtual TbUsuario? CodautorNavigation { get; set; }
 
     public virtual ICollection<TbStatusNoticia> TbStatusNoticia { get; } = new List<TbStatusNoticia>();
 }

@@ -31,11 +31,11 @@ public class UsuariosController : ControllerBase
         
             else{
 
-                // Se o TipoUsuario NÃO for Master (administrador), gera um código aleatório e envia no email no Usuário
-                if (model.TipoUsuario != "M"){
-                    model.CodAtivacao = model.CodAtivacao!.GerarCodigo();
+                if (model.TipoUsuario == "L"){
+                    model.CodAtivacao = model.CodAtivacao.GerarCodigo();
                     model.StatusConta = "N";
                     model.StatusSenha = "N";
+                    model.Senha = model.Senha.GerarHash();
 
                     context.TbUsuarios
                         .Where(u => u.Email == model.Email)
@@ -44,6 +44,9 @@ public class UsuariosController : ControllerBase
                         );
 
                     MailMessage mail = new MailMessage();
+                    // adm_seblog@yahoo.com
+                    // Admin@seblog
+                    //smtp.mail.yahoo.com
                     var d = "adm_seblog@outlook.com";
                     var s = "Admin@seblog";
                     mail.From = new MailAddress(d);
@@ -62,18 +65,51 @@ public class UsuariosController : ControllerBase
                         }
                         catch (System.Exception ex)
                         {
-                            Console.Write(ex.Message);
+                            return BadRequest();
                         }
                     }
-                // Se o TipoUsuario for Master (administrador), verifica a conta e a senha automaticamente.
-                }else{
+                
+                }else if(model.TipoUsuario == "A"){
+                    model.CodAtivacao = null;
+                    model.StatusConta = "N";
+                    model.StatusSenha = "N";
+                    model.Senha = model.Senha.GerarCodigo();
+
+                    MailMessage mail = new MailMessage();
+                    // stringelements@myyahoo.com
+                    // Admin@seblog
+                    //smtp.mail.yahoo.com
+                    var d = "adm_seblog@outlook.com";
+                    var s = "Admin@seblog";
+                    mail.From = new MailAddress(d);
+                    mail.To.Add(model.Email);
+                    mail.Subject = "SENHA TEMPORÁRIA - StringElements Blog";
+                    mail.Body = "Olá "+model.Nome+", segue senha de primeiro acesso ao StringElements Blog, válida por 30 MINUTOS: "+ model.Senha+"";
+
+                    using (var smtp = new SmtpClient("SMTP.office365.com", 587)){
+                        smtp.UseDefaultCredentials = false;
+                        smtp.EnableSsl = true;
+                        smtp.Credentials = new NetworkCredential(d,s);
+                        
+                        try
+                        {
+                            smtp.Send(mail);
+                        }
+                        catch (System.Exception ex)
+                        {
+                            return BadRequest();
+                        }
+                    }    
+                }else if(model.TipoUsuario == "M"){
                     model.CodAtivacao = null;
                     model.TipoUsuario = "M";
                     model.StatusConta = "V";
                     model.StatusSenha = "V";
+                    model.Senha = model.Senha.GerarHash();
+                }else{
+                    return BadRequest("Impossível cadastrar usuário");
                 }
-
-                model.Senha = model.Senha.GerarHash();
+              
                 context.TbUsuarios.Add(model);
                 await context.SaveChangesAsync();
                 return Ok("Usuário cadastrado com sucesso!");
