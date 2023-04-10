@@ -44,17 +44,17 @@ public class UsuariosController : ControllerBase
                         );
 
                     MailMessage mail = new MailMessage();
-                    // adm_seblog@yahoo.com
-                    // Admin@seblog
-                    //smtp.mail.yahoo.com
-                    var d = "adm_seblog@outlook.com";
+                    // adm_seblog@yahoo.com      // adm_seblog@outlook.com
+                    // Admin@seblog123
+                    //smtp.mail.yahoo.com       // SMTP.office365.com
+                    var d = "adm_seblog@yahoo.com";
                     var s = "Admin@seblog123";
                     mail.From = new MailAddress(d);
                     mail.To.Add(model.Email);
                     mail.Subject = "CÓDIGO DE ATIVAÇÃO - StringElements Blog";
                     mail.Body = "Olá "+model.Nome+", segue código de ativação para verificação da sua conta no StringElements Blog: "+ model.CodAtivacao+"";
 
-                    using (var smtp = new SmtpClient("SMTP.office365.com", 587)){
+                    using (var smtp = new SmtpClient("smtp.mail.yahoo.com", 587)){
                         smtp.UseDefaultCredentials = false;
                         smtp.EnableSsl = true;
                         smtp.Credentials = new NetworkCredential(d,s);
