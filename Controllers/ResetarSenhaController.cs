@@ -27,7 +27,7 @@ public class ResetarSenhaController : ControllerBase
             else if (await context.TbUsuarios.AnyAsync(p => p.DtaltSenha < DateTime.Now)) 
                 return BadRequest("Código Expirado, solicite novamente.");
             
-            context.TbUsuarios.Add(model);
+            context.TbUsuarios.Update(model);
             await context.SaveChangesAsync();
             return Ok("Senha alterada com sucesso!");
         }
