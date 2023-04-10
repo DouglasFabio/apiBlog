@@ -48,7 +48,7 @@ public class UsuariosController : ControllerBase
                     // Admin@seblog
                     //smtp.mail.yahoo.com
                     var d = "adm_seblog@outlook.com";
-                    var s = "Admin@seblog";
+                    var s = "Admin@seblog123";
                     mail.From = new MailAddress(d);
                     mail.To.Add(model.Email);
                     mail.Subject = "CÓDIGO DE ATIVAÇÃO - StringElements Blog";

@@ -42,7 +42,7 @@ public class AutoresController : ControllerBase
                     // Admin@seblog
                     //smtp.mail.yahoo.com
                     var d = "adm_seblog@outlook.com";
-                    var s = "Admin@seblog";
+                    var s = "Admin@seblog123";
                     mail.From = new MailAddress(d);
                     mail.To.Add(model.Email);
                     mail.Subject = "SENHA TEMPORÁRIA - StringElements Blog";
@@ -80,7 +80,7 @@ public class AutoresController : ControllerBase
     public async Task<ActionResult<IEnumerable<TbUsuario>>> Get()
     {
         try
-        {
+        {   
             return Ok(await context.TbUsuarios.Where(p=> p.TipoUsuario == "A").ToListAsync());
         }
         catch
@@ -108,6 +108,8 @@ public class AutoresController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult> Put([FromRoute] int id, [FromBody] TbUsuario model)
     {
+
+
         if (id != model.Idusuario)
             return BadRequest();
 
@@ -116,18 +118,41 @@ public class AutoresController : ControllerBase
             if (await context.TbUsuarios.AnyAsync(p => p.Idusuario == id) == false)
                 return NotFound();
 
-            context.TbUsuarios
-                .Where(u => u.Idusuario == id)
-                .ExecuteUpdate(s =>
-                    s.SetProperty(u => u.Nome, model.Nome)
-                );
-            context.TbUsuarios.Update(model);
-            await context.SaveChangesAsync();
+            context.Attach(model);
+            context.Entry(model).Property(p => p.Nome).IsModified = true;
+            context.SaveChanges();
             return Ok("Nome do autor editado com sucesso");
         }
         catch
         {
             return BadRequest();
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete([FromRoute] int id)
+    {
+        try
+        {
+            TbUsuario model = await context.TbUsuarios.FindAsync(id);
+
+            if (model == null)
+                return NotFound();
+
+        //  SE  NA TABELA DE NOTICIAS, O CÓDIGO DO AUTOR FOR IGUAL O CÓDIGO CLICADO - FALSO 
+            if(context.TbNoticias.Where(p => p.CodautorNavigation.Idusuario == id).Any() == false)
+            {
+                context.TbUsuarios.Remove(model);
+                await context.SaveChangesAsync();
+                return Ok("Autor deletado com sucesso!");
+            }else
+            {
+                return BadRequest("Existem notícias vinculadas a este autor!");
+            }
+        }
+        catch
+        {
+            return BadRequest("Erro ao remover autor.");
         }
     }
 }
