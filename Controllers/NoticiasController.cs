@@ -16,10 +16,17 @@ public class NoticiasController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Post([FromBody] TbNoticia model)
     {
+        model.DataPublicacao = DateTime.UtcNow;
+        model.Situacao = "N";
         try
-        {
-            model.DataPublicacao = DateTime.Now;
-            model.Situacao = "N";
+        {          
+            context.TbNoticias
+                    .Where(u => u.Idnoticia == model.Idnoticia)
+                    .ExecuteUpdate(c =>
+                        c.SetProperty(u => u.DataPublicacao, model.DataPublicacao)
+                         .SetProperty(u => u.Situacao, model.Situacao)
+                    );
+
             context.TbNoticias.Add(model);
             await context.SaveChangesAsync();
             return Ok("Notícia cadastrada com sucesso!");
@@ -35,7 +42,7 @@ public class NoticiasController : ControllerBase
     {
         try
         {   
-            return Ok(await context.TbNoticias.ToListAsync());
+            return Ok(await context.TbNoticias.Where(p=> p.Situacao == "N").ToListAsync());
         }
         catch
         {
@@ -92,6 +99,27 @@ public class NoticiasController : ControllerBase
         catch
         {
             return BadRequest();
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete([FromRoute] int id)
+    {
+        try
+        {
+            TbNoticia model = await context.TbNoticias.FindAsync(id);
+
+            if (model == null)
+                return NotFound();
+
+        //  SE  NA TABELA DE NOTICIAS, O CÓDIGO DO AUTOR FOR IGUAL O CÓDIGO CLICADO - FALSO 
+                context.TbNoticias.Remove(model);
+                await context.SaveChangesAsync();
+                return Ok("Notícia deletada com sucesso!");
+        }
+        catch
+        {
+            return BadRequest("Erro ao remover notícia.");
         }
     }
 }

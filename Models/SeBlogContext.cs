@@ -28,14 +28,14 @@ public partial class SeBlogContext : DbContext
     {
         modelBuilder.Entity<TbNoticia>(entity =>
         {
-            entity.HasKey(e => e.Idnoticia).HasName("PK__TB_Notic__A7F535DB61A02058");
+            entity.HasKey(e => e.Idnoticia).HasName("PK__TB_Notic__A7F535DB5797BCEA");
 
             entity.ToTable("TB_Noticias");
 
             entity.Property(e => e.Idnoticia).HasColumnName("IDNoticia");
             entity.Property(e => e.Codautor).HasColumnName("CODAutor");
-            entity.Property(e => e.DataAlteracao).HasColumnType("date");
-            entity.Property(e => e.DataPublicacao).HasColumnType("date");
+            entity.Property(e => e.DataAlteracao).HasColumnType("datetime");
+            entity.Property(e => e.DataPublicacao).HasColumnType("datetime");
             entity.Property(e => e.Situacao)
                 .HasMaxLength(1)
                 .IsUnicode(false);
@@ -54,7 +54,7 @@ public partial class SeBlogContext : DbContext
 
         modelBuilder.Entity<TbStatusNoticia>(entity =>
         {
-            entity.HasKey(e => e.IdstatusNoticia).HasName("PK__TB_Statu__A88FCFC0505D3F90");
+            entity.HasKey(e => e.IdstatusNoticia).HasName("PK__TB_Statu__A88FCFC06A633B74");
 
             entity.ToTable("TB_StatusNoticias");
 
@@ -75,11 +75,11 @@ public partial class SeBlogContext : DbContext
 
         modelBuilder.Entity<TbUsuario>(entity =>
         {
-            entity.HasKey(e => e.Idusuario).HasName("PK__TB_Usuar__52311169192FA540");
+            entity.HasKey(e => e.Idusuario).HasName("PK__TB_Usuar__52311169265F00BC");
 
             entity.ToTable("TB_Usuarios");
 
-            entity.HasIndex(e => e.Email, "UQ__TB_Usuar__A9D105340C1AD4EF").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__TB_Usuar__A9D10534DD06A555").IsUnique();
 
             entity.Property(e => e.Idusuario).HasColumnName("IDUsuario");
             entity.Property(e => e.ApelidoAutor)
@@ -87,7 +87,6 @@ public partial class SeBlogContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.CodAtivacao).IsUnicode(false);
             entity.Property(e => e.CodSenha).IsUnicode(false);
-            entity.Property(e => e.Codnoticia).HasColumnName("CODNoticia");
             entity.Property(e => e.DtaltSenha)
                 .HasColumnType("datetime")
                 .HasColumnName("DTAltSenha");

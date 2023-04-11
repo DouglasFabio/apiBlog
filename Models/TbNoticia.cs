@@ -11,7 +11,7 @@ public partial class TbNoticia
 
     public string Subtitulo { get; set; } = null!;
 
-    public DateTime DataPublicacao { get; set; }
+    public DateTime? DataPublicacao { get; set; }
 
     public string Texto { get; set; } = null!;
 

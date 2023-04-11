@@ -30,10 +30,8 @@ public partial class TbUsuario
 
     public string? ApelidoAutor { get; set; }
 
-    public int? Codnoticia { get; set; }
-
     [NotMapped]
-    public string? Token {get; set;}
+    public string? Token { get; set; }
 
     public virtual ICollection<TbNoticia> TbNoticia { get; } = new List<TbNoticia>();
 
