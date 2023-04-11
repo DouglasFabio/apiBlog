@@ -108,6 +108,8 @@ public class AutoresController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult> Put([FromRoute] int id, [FromBody] TbUsuario model)
     {
+        var dadosAutor = context.TbUsuarios.Where(p => p.Idusuario == id);
+
         if (id != model.Idusuario)
             return BadRequest();
 
@@ -115,8 +117,19 @@ public class AutoresController : ControllerBase
         {
             if (await context.TbUsuarios.AnyAsync(p => p.Idusuario == id) == false)
                 return NotFound();
+            
 
-            context.TbUsuarios.Update(model);
+            TbUsuario autor = new TbUsuario();
+
+            autor.Email = autor.Email;
+            autor.Senha = autor.Senha;
+            
+            context.TbUsuarios
+                        .Where(u => u.Idusuario == id)
+                        .ExecuteUpdate(s =>
+                            s.SetProperty(u => u.Nome, model.Nome)
+                        );
+
             await context.SaveChangesAsync();
             return Ok("Nome editado com sucesso!");
         }
