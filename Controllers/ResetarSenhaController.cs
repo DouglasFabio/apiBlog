@@ -40,11 +40,13 @@ public class ResetarSenhaController : ControllerBase
 
             await context.SaveChangesAsync();
             
-            model.Senha = null;
+            
+
+            autor.CodSenha = null;
             context.TbUsuarios
                         .Where(u => u.CodSenha == model.CodSenha)
                         .ExecuteUpdate(s =>
-                            s.SetProperty(u => u.CodSenha, model.Senha)
+                            s.SetProperty(u => u.CodSenha, autor.CodSenha)
                         );
             return Ok("Senha alterada com sucesso!");
         }
