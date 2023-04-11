@@ -9,7 +9,7 @@ public partial class TbNoticia
 
     public string Titulo { get; set; } = null!;
 
-    public string SubTitulo { get; set; } = null!;
+    public string Subtitulo { get; set; } = null!;
 
     public DateTime DataPublicacao { get; set; }
 

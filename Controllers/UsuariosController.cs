@@ -4,6 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -153,6 +158,8 @@ public class UsuariosController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult> Put([FromRoute] int id, [FromBody] TbUsuario model)
     {
+        var dadosAutor = context.TbUsuarios.Where(p => p.Idusuario == id);
+
         if (id != model.Idusuario)
             return BadRequest();
 
@@ -160,15 +167,62 @@ public class UsuariosController : ControllerBase
         {
             if (await context.TbUsuarios.AnyAsync(p => p.Idusuario == id) == false)
                 return NotFound();
+            
 
+            TbUsuario autor = new TbUsuario();
+
+            autor.Nome = autor.Nome;
+            autor.Senha = autor.Senha;
+            
             context.TbUsuarios
-                .Where(u => u.Idusuario == id)
-                .ExecuteUpdate(s =>
-                    s.SetProperty(u => u.Email, model.Email)
-                     .SetProperty(u => u.Dtnascimento, model.Dtnascimento)
-                );
+                        .Where(u => u.Idusuario == id)
+                        .ExecuteUpdate(s =>
+                            s.SetProperty(u => u.Email, model.Email)
+                             .SetProperty(v => v.Dtnascimento , model.Dtnascimento)
+                        );
+
             await context.SaveChangesAsync();
             return Ok("Dados atualizados com sucesso!");
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    [AllowAnonymous]
+    [HttpPost("autenticar")]
+    public async Task<ActionResult> Autenticar([FromBody] TbUsuario usuario)
+    {
+        try
+        {
+            TbUsuario autenticado = await context.TbUsuarios.FirstOrDefaultAsync(p => p.Email == usuario.Email && p.Senha == usuario.Senha);
+
+            if (autenticado == null)
+                return BadRequest("Usuário inválido");
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetValue("Secret", ""));
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                new Claim(ClaimTypes.Sid, autenticado.Idusuario.ToString()),
+                new Claim(ClaimTypes.Name, autenticado.Nome),
+                new Claim(ClaimTypes.Email, autenticado.Email)
+                }),
+                Expires = DateTime.UtcNow.AddHours(3),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
+            };
+
+            if (autenticado.Email.EndsWith("@ifsp.edu.br"))
+                tokenDescriptor.Subject.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            usuario.Token = tokenHandler.WriteToken(token);
+
+            return Ok(usuario.Token);
         }
         catch
         {

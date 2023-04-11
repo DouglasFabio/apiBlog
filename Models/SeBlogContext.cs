@@ -39,7 +39,7 @@ public partial class SeBlogContext : DbContext
             entity.Property(e => e.Situacao)
                 .HasMaxLength(1)
                 .IsUnicode(false);
-            entity.Property(e => e.SubTitulo)
+            entity.Property(e => e.Subtitulo)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Texto).IsUnicode(false);

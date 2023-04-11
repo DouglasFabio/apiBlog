@@ -18,6 +18,8 @@ public class NoticiasController : ControllerBase
     {
         try
         {
+            model.DataPublicacao = DateTime.Now;
+            model.Situacao = "N";
             context.TbNoticias.Add(model);
             await context.SaveChangesAsync();
             return Ok("Notícia cadastrada com sucesso!");
@@ -60,6 +62,8 @@ public class NoticiasController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult> Put([FromRoute] int id, [FromBody] TbNoticia model)
     {
+        var dadosNoticia = context.TbNoticias.Where(p => p.Idnoticia == id);
+
         if (id != model.Idnoticia)
             return BadRequest();
 
@@ -67,10 +71,23 @@ public class NoticiasController : ControllerBase
         {
             if (await context.TbNoticias.AnyAsync(p => p.Idnoticia == id) == false)
                 return NotFound();
+            
 
-            context.TbNoticias.Update(model);
+            TbNoticia noticia = new TbNoticia();
+
+            noticia.DataPublicacao = noticia.DataPublicacao;
+            noticia.DataAlteracao = DateTime.Now;
+        
+            context.TbNoticias
+                        .Where(u => u.Idnoticia == id)
+                        .ExecuteUpdate(s =>
+                            s.SetProperty(u => u.Titulo, model.Titulo)
+                             .SetProperty(u => u.Subtitulo, model.Subtitulo)
+                             .SetProperty(u => u.Texto, model.Texto)
+                        );
+
             await context.SaveChangesAsync();
-            return Ok("Notícia salva com sucesso!");
+            return Ok("Notícia editada com sucesso!");
         }
         catch
         {
