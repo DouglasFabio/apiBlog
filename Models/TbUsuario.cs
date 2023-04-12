@@ -33,6 +33,9 @@ public partial class TbUsuario
     [NotMapped]
     public string? Token { get; set; }
 
+    [NotMapped]
+    public string? SenhaInicial { get; set; }
+
     public virtual ICollection<TbNoticia> TbNoticia { get; } = new List<TbNoticia>();
 
     public virtual ICollection<TbStatusNoticia> TbStatusNoticia { get; } = new List<TbStatusNoticia>();

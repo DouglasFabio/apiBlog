@@ -17,36 +17,30 @@ public class VerificaSenhaInicialAutorController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> Put([FromBody] TbUsuario model)
     {
-        if (await context.TbUsuarios.AnyAsync(p => p.CodAtivacao == model.CodAtivacao) == false)
-            return BadRequest("Código inválido, tente novamente.");
+        if (await context.TbUsuarios.AnyAsync(p => p.Senha == model.SenhaInicial) == false)
+            return BadRequest("Senha inválida, digite a senha inicial recebida no email.");
         
         try
         {
-            if (await context.TbUsuarios.AnyAsync(p => p.CodAtivacao == model.CodAtivacao)){
-                TbUsuario usuario = new TbUsuario();
-                usuario.Nome = usuario.Nome;
-                usuario.Email = usuario.Email;
-                usuario.Senha = usuario.Senha;
-                usuario.StatusConta = "V";
+            if (await context.TbUsuarios.AnyAsync(p => p.Senha == model.SenhaInicial)){
+                
+                TbUsuario autor = new TbUsuario();
+                autor.Nome = autor.Nome;
+                autor.Email = autor.Email;
+                autor.Senha = model.Senha.GerarHash();
+                autor.StatusConta = "V";
 
                 context.TbUsuarios
-                        .Where(u => u.CodAtivacao == model.CodAtivacao)
+                        .Where(u => u.Senha == model.SenhaInicial)
                         .ExecuteUpdate(s =>
-                            s.SetProperty(u => u.StatusConta, usuario.StatusConta)
+                            s.SetProperty(u => u.Senha, autor.Senha)
+                             .SetProperty(u => u.StatusConta, autor.StatusConta)
                         );
                 
                 await context.SaveChangesAsync();
-                
-                usuario.CodAtivacao = null;
-                context.TbUsuarios
-                        .Where(u => u.CodAtivacao == model.CodAtivacao)
-                        .ExecuteUpdate(s =>
-                            s.SetProperty(u => u.CodAtivacao, usuario.CodAtivacao)
-                        );
-
-                return Ok("Conta verificada com sucesso!");
+                return Ok("Senha atualizada com sucesso!");
             }else 
-                return BadRequest("Não foi possível verificar conta.");        
+                return BadRequest("Não foi possível atualizar senha.");        
         }
         catch
         {
