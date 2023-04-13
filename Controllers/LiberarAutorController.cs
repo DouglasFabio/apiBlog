@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 [Route("api/[controller]")]
 [ApiController]
-public class BloquearAutorController : ControllerBase
+public class LiberarAutorController : ControllerBase
 {
     private readonly SeBlogContext context;
 
-    public BloquearAutorController(SeBlogContext Context)
+    public LiberarAutorController(SeBlogContext Context)
     {
         context = Context;
     }
@@ -37,10 +37,10 @@ public class BloquearAutorController : ControllerBase
                 context.TbUsuarios
                     .Where(u => u.Idusuario == id)
                     .ExecuteUpdate(s =>
-                        s.SetProperty(u => u.StatusSenha, "B")
+                        s.SetProperty(u => u.StatusSenha, "N")
                     );
                 await context.SaveChangesAsync();
-                return Ok("Autor bloqueado com sucesso!");          
+                return Ok("Autor desbloqueado com sucesso!");          
         }
         catch
         {
