@@ -31,10 +31,10 @@ public partial class TbUsuario
     public string? ApelidoAutor { get; set; }
 
     [NotMapped]
-    public string? Token { get; set; }
+    public string? Token {get; set;}
 
     [NotMapped]
-    public string? SenhaInicial { get; set; }
+    public string? SenhaInicial {get; set;}
 
     public virtual ICollection<TbNoticia> TbNoticia { get; } = new List<TbNoticia>();
 

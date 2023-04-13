@@ -17,6 +17,8 @@ public partial class SeBlogContext : DbContext
 
     public virtual DbSet<TbNoticia> TbNoticias { get; set; }
 
+    public virtual DbSet<TbStatus> TbStatuses { get; set; }
+
     public virtual DbSet<TbStatusNoticia> TbStatusNoticias { get; set; }
 
     public virtual DbSet<TbUsuario> TbUsuarios { get; set; }
@@ -52,25 +54,42 @@ public partial class SeBlogContext : DbContext
                 .HasConstraintName("FK__TB_Notici__CODAu__3A81B327");
         });
 
+        modelBuilder.Entity<TbStatus>(entity =>
+        {
+            entity.HasKey(e => e.Idstatus).HasName("PK__TB_Statu__8DA24510702DA321");
+
+            entity.ToTable("TB_Status");
+
+            entity.Property(e => e.Idstatus).HasColumnName("IDStatus");
+            entity.Property(e => e.NomeStatus)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<TbStatusNoticia>(entity =>
         {
-            entity.HasKey(e => e.IdstatusNoticia).HasName("PK__TB_Statu__A88FCFC06A633B74");
+            entity.HasKey(e => e.IdstatusNoticia).HasName("PK__TB_Statu__A88FCFC05F4740FC");
 
             entity.ToTable("TB_StatusNoticias");
 
             entity.Property(e => e.IdstatusNoticia).HasColumnName("IDStatusNoticia");
             entity.Property(e => e.Codleitor).HasColumnName("CODLeitor");
             entity.Property(e => e.Codnoticia).HasColumnName("CODNoticia");
+            entity.Property(e => e.Codstatus).HasColumnName("CODStatus");
             entity.Property(e => e.Comentario).IsUnicode(false);
-            entity.Property(e => e.DtComentario).HasColumnType("date");
+            entity.Property(e => e.DtComentario).HasColumnType("datetime");
 
             entity.HasOne(d => d.CodleitorNavigation).WithMany(p => p.TbStatusNoticia)
                 .HasForeignKey(d => d.Codleitor)
-                .HasConstraintName("FK__TB_Status__CODLe__3E52440B");
+                .HasConstraintName("FK__TB_Status__CODLe__571DF1D5");
 
             entity.HasOne(d => d.CodnoticiaNavigation).WithMany(p => p.TbStatusNoticia)
                 .HasForeignKey(d => d.Codnoticia)
-                .HasConstraintName("FK__TB_Status__CODNo__3D5E1FD2");
+                .HasConstraintName("FK__TB_Status__CODNo__5629CD9C");
+
+            entity.HasOne(d => d.CodstatusNavigation).WithMany(p => p.TbStatusNoticia)
+                .HasForeignKey(d => d.Codstatus)
+                .HasConstraintName("FK__TB_Status__CODSt__5812160E");
         });
 
         modelBuilder.Entity<TbUsuario>(entity =>
