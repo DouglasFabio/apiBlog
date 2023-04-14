@@ -4,37 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 [Route("api/[controller]")]
 [ApiController]
-public class NoticiasController : ControllerBase
+public class NoticiasAutorController : ControllerBase
 {
     private readonly SeBlogContext context;
 
-    public NoticiasController(SeBlogContext Context)
+    public NoticiasAutorController(SeBlogContext Context)
     {
         context = Context;
-    }
-
-    [HttpPost]
-    public async Task<ActionResult> Post([FromBody] TbNoticia model)
-    {
-        model.DataPublicacao = DateTime.UtcNow;
-        model.Situacao = "N";
-        try
-        {          
-            context.TbNoticias
-                    .Where(u => u.Idnoticia == model.Idnoticia)
-                    .ExecuteUpdate(c =>
-                        c.SetProperty(u => u.DataPublicacao, model.DataPublicacao)
-                         .SetProperty(u => u.Situacao, model.Situacao)
-                    );
-
-            context.TbNoticias.Add(model);
-            await context.SaveChangesAsync();
-            return Ok("Notícia cadastrada com sucesso!");
-        }
-        catch
-        {
-            return BadRequest("Falha ao cadastrar notícia.");
-        }
     }
 
     [HttpGet]
@@ -42,7 +18,7 @@ public class NoticiasController : ControllerBase
     {
         try
         {   
-            return Ok(await context.TbNoticias.Where(p=> p.Situacao == "N").ToListAsync());
+            return Ok(await context.TbNoticias.Where(p=> p.Situacao == "P").Where(p => p.CodautorNavigation.Idusuario == p.Codautor).OrderByDescending(p => p.DataPublicacao).ToListAsync());
         }
         catch
         {
@@ -56,7 +32,7 @@ public class NoticiasController : ControllerBase
         try
         {
             if (await context.TbNoticias.AnyAsync(p => p.Idnoticia == id))
-                return Ok(await context.TbNoticias.FindAsync(id));
+                return Ok(await context.TbNoticias.Where(p=> p.Situacao == "P").Where(p => p.CodautorNavigation.Idusuario == p.Codautor).OrderByDescending(p => p.DataPublicacao).ToListAsync());
             else
                 return NotFound();
         }
@@ -69,6 +45,7 @@ public class NoticiasController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult> Put([FromRoute] int id, [FromBody] TbNoticia model)
     {
+        var dadosNoticia = context.TbNoticias.Where(p => p.Idnoticia == id);
 
         if (id != model.Idnoticia)
             return BadRequest();
@@ -83,15 +60,13 @@ public class NoticiasController : ControllerBase
 
             noticia.DataPublicacao = noticia.DataPublicacao;
             noticia.DataAlteracao = DateTime.Now;
-            noticia.Situacao = noticia.Situacao;
-
+        
             context.TbNoticias
                         .Where(u => u.Idnoticia == id)
                         .ExecuteUpdate(s =>
                             s.SetProperty(u => u.Titulo, model.Titulo)
                              .SetProperty(u => u.Subtitulo, model.Subtitulo)
                              .SetProperty(u => u.Texto, model.Texto)
-                             .SetProperty(u => u.DataAlteracao, noticia.DataAlteracao)
                         );
 
             await context.SaveChangesAsync();

@@ -16,7 +16,7 @@ public class NoticiasPublicadasController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Post([FromBody] TbNoticia model)
     {
-        model.DataPublicacao = DateTime.UtcNow;
+        model.DataPublicacao = DateTime.Now;
         model.Situacao = "N";
         try
         {          
