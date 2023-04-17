@@ -47,48 +47,14 @@ public class ComentariosController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<TbUsuario>> Get([FromRoute] int id)
+    public async Task<ActionResult<TbStatusNoticia>> Get([FromRoute] int id)
     {
         try
         {
-            if (await context.TbUsuarios.AnyAsync(p => p.Idusuario == id))
-                return Ok(await context.TbUsuarios.FindAsync(id));
+            if (await context.TbStatusNoticias.AnyAsync(p => p.IdstatusNoticia == id))
+                return Ok(await context.TbStatusNoticias.FindAsync(id));
             else
                 return NotFound();
-        }
-        catch
-        {
-            return BadRequest();
-        }
-    }
-
-    [HttpPut("{id}")]
-    public async Task<ActionResult> Put([FromRoute] int id, [FromBody] TbUsuario model)
-    {
-        var dadosAutor = context.TbUsuarios.Where(p => p.Idusuario == id);
-
-        if (id != model.Idusuario)
-            return BadRequest();
-
-        try
-        {
-            if (await context.TbUsuarios.AnyAsync(p => p.Idusuario == id) == false)
-                return NotFound();
-            
-
-            TbUsuario autor = new TbUsuario();
-
-            autor.Email = autor.Email;
-            autor.Senha = autor.Senha;
-            
-            context.TbUsuarios
-                        .Where(u => u.Idusuario == id)
-                        .ExecuteUpdate(s =>
-                            s.SetProperty(u => u.Nome, model.Nome)
-                        );
-
-            await context.SaveChangesAsync();
-            return Ok("Nome editado com sucesso!");
         }
         catch
         {
@@ -101,25 +67,18 @@ public class ComentariosController : ControllerBase
     {
         try
         {
-            TbUsuario model = await context.TbUsuarios.FindAsync(id);
+            TbStatusNoticia model = await context.TbStatusNoticias.FindAsync(id);
 
             if (model == null)
                 return NotFound();
 
-        //  SE  NA TABELA DE NOTICIAS, O CÓDIGO DO AUTOR FOR IGUAL O CÓDIGO CLICADO - FALSO 
-            if(context.TbNoticias.Where(p => p.CodautorNavigation.Idusuario == id).Any() == false)
-            {
-                context.TbUsuarios.Remove(model);
-                await context.SaveChangesAsync();
-                return Ok("Autor deletado com sucesso!");
-            }else
-            {
-                return BadRequest("Existem notícias vinculadas a este autor!");
-            }
+            context.TbStatusNoticias.Remove(model);
+            await context.SaveChangesAsync();
+            return Ok("Comentário deletado com sucesso!");
         }
         catch
         {
-            return BadRequest("Erro ao remover autor.");
+            return BadRequest("Erro ao remover comentário.");
         }
     }
 }
