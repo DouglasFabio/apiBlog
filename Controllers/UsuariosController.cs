@@ -217,7 +217,7 @@ public class UsuariosController : ControllerBase
             };
 
             if (autenticado.Email.EndsWith("@ifsp.edu.br"))
-                tokenDescriptor.Subject.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+                tokenDescriptor.Subject.AddClaim(new Claim(ClaimTypes.Role, "Master"));
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             usuario.Token = tokenHandler.WriteToken(token);
