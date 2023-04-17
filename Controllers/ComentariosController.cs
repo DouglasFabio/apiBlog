@@ -34,15 +34,15 @@ public class ComentariosController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TbUsuario>>> Get()
+    public async Task<ActionResult<IEnumerable<TbStatusNoticia>>> Get()
     {
         try
         {   
-            return Ok(await context.TbUsuarios.Where(p=> p.TipoUsuario == "A").ToListAsync());
+            return Ok(await context.TbStatusNoticias.ToListAsync());
         }
         catch
         {
-            return BadRequest("Erro ao obter autores");
+            return BadRequest("Erro ao obter comentários");
         }
     }
 
